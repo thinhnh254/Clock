@@ -1,16 +1,34 @@
-const deg = 6;
-const hr = document.querySelector("#hr");
-const mn = document.querySelector("#mn");
-const sc = document.querySelector("#sc");
+function updateClock() {
+  const now = new Date();
+  const hours = now.getHours() || 12;
+  const minutes = now.getMinutes();
+  const seconds = now.getSeconds();
 
-setInterval(() => {
-  let date = new Date();
+  // Calculate angles for hour, minute, and second hands
+  const hourAngle = (hours % 12) * 30 + minutes * 0.5;
+  const minuteAngle = minutes * 6;
+  const secondAngle = seconds * 6;
 
-  let hh = date.getHours() * 30;
-  let mm = date.getMinutes() * deg;
-  let ss = date.getSeconds() * deg;
+  // Rotate the lines based on the calculated angles
+  $("#hourLine")
+    .css("transform", `rotate(${hourAngle}deg)`)
+    .children(".clock_number")
+    .html(hours)
+    .css("transform", `rotate(${-hourAngle}deg)`);
+  $("#minuteLine")
+    .css("transform", `rotate(${minuteAngle}deg)`)
+    .children(".clock_number")
+    .html(minutes)
+    .css("transform", `rotate(${-minuteAngle}deg)`);
+  $("#secondLine")
+    .css("transform", `rotate(${secondAngle}deg)`)
+    .children(".clock_number")
+    .html(seconds)
+    .css("transform", `rotate(${-secondAngle}deg)`);
+}
 
-  hr.style.transform = `rotate(${hh + mm / 12}deg)`;
-  mn.style.transform = `rotate(${mm}deg)`;
-  sc.style.transform = `rotate(${ss}deg)`;
-});
+// Update the clock every second
+setInterval(updateClock, 1000);
+
+// Initial call to display the clock immediately
+updateClock();
